@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>TX DESK · 交易风控</title>
+<link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+<div class="wrap stack">
+  <p class="hint no-print">数据只在本机浏览器里计算，不会上传。请用 Chrome / Safari / Edge。微信/QQ 里请选「用浏览器打开」。导出 PDF 时勾选「背景图形」，并选横向纸张。</p>
+
+  <div class="stack stack-8 no-print">
+    <div class="row">
+      <h1>TX DESK</h1>
+      <span class="pill sm">交易风控 · 本机</span>
+      <span class="spacer"></span>
+      <button class="btn primary" id="btn-print" type="button" disabled>导出 PDF</button>
+    </div>
+    <p class="dim" id="file-meta">尚未载入文件。一次拖入一个 .xlsx，优先读工作表「数据」。</p>
+    <div class="drop" id="drop" role="button" tabindex="0">
+      <div class="t">把交易记录 Excel 拖到这里，或点击选择</div>
+      <p class="dim">.xlsx · 当天全量 · 列名需与现有交易记录一致 · 卡号将一律掩码</p>
+    </div>
+    <input id="file" type="file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+    <div class="err" id="err" hidden></div>
+    <details class="adv">
+      <summary>高级选项 · 改完立刻重算</summary>
+      <div class="body">
+        <div class="adv-grid">
+          <label class="field">拒付阈值 %<input id="th-decline" type="number" min="0" max="100" step="0.1" /></label>
+          <label class="field">退款阈值 %<input id="th-refund" type="number" min="0" max="100" step="0.1" /></label>
+          <label class="field">小额美元<input id="th-small" type="number" min="0" step="1" /></label>
+          <label class="field">单卡转入次数 &gt;<input id="th-topup-n" type="number" min="1" step="1" /></label>
+          <label class="field">快充间隔（秒）<input id="th-interval" type="number" min="1" step="1" /></label>
+          <label class="field">用户拒付最低消费笔<input id="th-user-n" type="number" min="1" step="1" /></label>
+          <label class="field">单卡拒付最低消费笔<input id="th-card-n" type="number" min="1" step="1" /></label>
+          <label class="field">群充最少卡数<input id="th-burst-cards" type="number" min="2" step="1" /></label>
+          <label class="field">账户×用户最低消费笔<input id="th-au-n" type="number" min="1" step="1" /></label>
+          <label class="field">EURUSD<input id="fx-eurusd" type="number" min="0.0001" step="0.0001" /></label>
+          <label class="field">USDINR<input id="fx-usdinr" type="number" min="0.0001" step="0.01" /></label>
+        </div>
+        <p class="ghost">口径写死在 js/rules.js；这里只改阈值与汇率。后期加规则：在 RULE_DEFS 追加一条，并在 render.js 补表。</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="stack" id="desk">
+    <div id="desk-head"></div>
+    <nav class="tab-nav no-print" id="tab-nav">
+      <button type="button" class="on" data-tab="overview">总览</button>
+      <button type="button" data-tab="alerts">异常台账</button>
+      <button type="button" data-tab="book">通道账户</button>
+      <button type="button" data-tab="user">用户</button>
+      <button type="button" data-tab="card">单卡</button>
+      <button type="button" data-tab="burst">群充</button>
+      <button type="button" data-tab="mcc">MCC / 广告</button>
+    </nav>
+    <section class="panel on" id="p-overview"></section>
+    <section class="panel" id="p-alerts"></section>
+    <section class="panel" id="p-book"></section>
+    <section class="panel" id="p-user"></section>
+    <section class="panel" id="p-card"></section>
+    <section class="panel" id="p-burst"></section>
+    <section class="panel" id="p-mcc"></section>
+    <div id="desk-foot"></div>
+  </div>
+</div>
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/analyze.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
